@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: print-date
+spec:
+  schedule: "*/5 * * * *"
+  successfulJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: 1800
+      template:
+        spec:
+          containers:
+          - name: print-date
+            image: busybox
+            command:
+            - /bin/sh
+            - -c
+            - "date; echo 'Printed by Kubernetes CronJob'"
+          restartPolicy: OnFailure
+
